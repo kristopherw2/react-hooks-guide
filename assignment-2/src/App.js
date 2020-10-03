@@ -11,23 +11,31 @@ class App extends Component {
 		this.setState({ newText: event.target.value });
 	};
 
+	deleteLetterHandler = (letterIndex) => {
+    const text = this.state.newText.split('');
+    text.splice(letterIndex, 1)
+    const updatedText = text.join('')
+    this.setState({newText: updatedText})
+	};
+
 	render() {
-    const textLength = this.state.newText.length;
-    
-    
-		let charLetter = null;
-		charLetter = (
-			<div>
-				{this.state.newText.split("").map((text) => {
-					return <CharComponent letter={text} />;
-				})}
-			</div>
-		);
+		const textLength = this.state.newText.length;
+
+		const charLetter = this.state.newText.split('').map((text, index) => {
+					return (
+						<CharComponent
+							click={() => this.deleteLetterHandler(index)}
+              letter={text}
+              key={index}
+						/>
+          );
+  })       
 		return (
 			<div>
 				<input
 					type='text'
 					onChange={(event) => this.textUpdateHandler(event)}
+					value={this.state.newText}
 				/>
 				<ValidationComponent length={textLength} />
 				{charLetter}
